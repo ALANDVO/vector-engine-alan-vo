@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "current_feature": "core-skeleton",
+  "features": [
+    {
+      "id": "core-skeleton",
+      "title": "FastAPI/React skeleton with SQLite persistence and basic API",
+      "status": "in_progress",
+      "acceptance": [
+        "FastAPI app starts and serves health endpoint",
+        "React/Vite frontend builds and loads",
+        "SQLite database initializes with schema",
+        "Backend tests pass (pytest)",
+        "Frontend typecheck and build pass"
+      ],
+      "implementation": [
+        "backend/app/main.py",
+        "backend/app/api/v1/health.py",
+        "backend/app/core/config.py",
+        "backend/app/core/database.py",
+        "backend/requirements.txt",
+        "frontend/package.json",
+        "frontend/src/main.tsx",
+        "frontend/src/App.tsx"
+      ],
+      "tests": [
+        "backend/tests/test_health.py",
+        "frontend/src/__tests__/App.test.tsx"
+      ]
+    },
+    {
+      "id": "auth-oidc",
+      "title": "OIDC authentication with Keycloak (PKCE flow)",
+      "status": "planned",
+      "acceptance": [
+        "Login redirects to Keycloak",
+        "Callback exchanges code for tokens",
+        "Protected endpoints require valid token",
+        "Logout clears session"
+      ],
+      "implementation": [],
+      "tests": []
+    },
+    {
+      "id": "vector-engine",
+      "title": "Vector embedding storage and similarity search",
+      "status": "planned",
+      "acceptance": [
+        "Store document chunks with embeddings",
+        "Similarity search returns ranked results",
+        "Batch embedding generation endpoint",
+        "Deterministic offline mode without LLM key"
+      ],
+      "implementation": [],
+      "tests": []
+    },
+    {
+      "id": "rag-workflow",
+      "title": "RAG workflow: ingest, search, generate",
+      "status": "planned",
+      "acceptance": [
+        "Ingest documents (text/PDF) with chunking",
+        "Semantic search across corpus",
+        "LLM-backed answer generation (opt-in)"
+      ],
+      "implementation": [],
+      "tests": []
+    },
+    {
+      "id": "docker-ci",
+      "title": "Dockerfiles, compose.yaml, and CI workflow",
+      "status": "planned",
+      "acceptance": [
+        "Backend and frontend Dockerfiles build",
+        "compose.yaml includes Keycloak + DB",
+        "CI runs pytest, npm build/test, docker build"
+      ],
+      "implementation": [],
+      "tests": []
+    },
+    {
+      "id": "docs-packaging",
+      "title": "README, LICENSE, CHANGELOG, portfolio.json, .env.example",
+      "status": "planned",
+      "acceptance": [
+        "README with install/run/test steps",
+        "MIT LICENSE with author",
+        "CHANGELOG with actual changes",
+        "portfolio.json with required fields",
+        ".env.example with blank credentials"
+      ],
+      "implementation": [],
+      "tests": []
+    }
+  ]
+}
