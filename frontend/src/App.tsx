@@ -61,7 +61,7 @@ function App() {
       </section>
 
       <footer style={{ marginTop: "2rem", color: "#a0aec0", fontSize: "0.875rem" }}>
-        <p>Alan Vo <alanvo@gmail.com> | AI & Machine Learning</p>
+        <p>Alan Vo &lt;alanvo@gmail.com&gt; | AI &amp; Machine Learning</p>
       </footer>
     </div>
   );

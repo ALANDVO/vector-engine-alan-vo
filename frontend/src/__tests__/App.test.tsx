@@ -1,6 +1,6 @@
+/// <reference types="@testing-library/jest-dom" />
 import { render, screen, waitFor } from "@testing-library/react";
 import App from "../App";
-
 describe("App", () => {
   it("renders the application title", () => {
     render(<App />);
@@ -9,7 +9,8 @@ describe("App", () => {
 
   it("renders loading state initially", () => {
     render(<App />);
-    expect(screen.getByText(/checking/i)).toBeInTheDocument();
+    const loadingElements = screen.getAllByText(/checking/i);
+    expect(loadingElements.length).toBe(2);
   });
 
   it("renders footer with author attribution after load", async () => {
