@@ -4,13 +4,13 @@ Each round completes one feature or repair. Future items are planned, not implem
 
 ## Current round
 
-core-skeleton
+auth-oidc
 
 ## Roadmap
 
 ### core-skeleton — FastAPI/React skeleton with SQLite persistence and basic API
 
-Status: in_progress
+Status: done
 
 Acceptance:
 - FastAPI app starts and serves health endpoint
@@ -19,13 +19,13 @@ Acceptance:
 - Backend tests pass (pytest)
 - Frontend typecheck and build pass
 
-Implementation: `backend/app/main.py`, `backend/app/api/v1/health.py`, `backend/app/core/config.py`, `backend/app/core/database.py`, `backend/requirements.txt`, `frontend/package.json`, `frontend/src/main.tsx`, `frontend/src/App.tsx`
+Implementation: `backend/app/main.py`, `backend/app/api/v1/health.py`, `backend/app/core/config.py`, `backend/app/core/database.py`, `backend/requirements.txt`, `frontend/package.json`, `frontend/src/main.tsx`, `frontend/src/App.tsx`, `frontend/index.html`
 
 Tests: `backend/tests/test_health.py`, `frontend/src/__tests__/App.test.tsx`
 
 ### auth-oidc — OIDC authentication with Keycloak (PKCE flow)
 
-Status: planned
+Status: in_progress
 
 Acceptance:
 - Login redirects to Keycloak
