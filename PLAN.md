@@ -72,3 +72,6 @@ Acceptance:
 - portfolio.json with required fields
 - .env.example with blank credentials
 
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)

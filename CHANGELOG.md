@@ -27,3 +27,7 @@ Partial code published for continued development. Known issues: STATUS.md.
 
 ### Known Issues
 - React `act()` warnings in vitest tests (non-blocking)
+
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)
