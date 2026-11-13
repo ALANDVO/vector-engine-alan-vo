@@ -15,7 +15,6 @@ class Settings(BaseSettings):
     app_version: str = "1.0.0"
     debug: bool = False
     host: str = "127.0.0.1"
-    port: int = 8000
     database_url: str = "sqlite+aiosqlite:///./vector_engine.db"
 
     # CORS
