@@ -114,6 +114,59 @@ class TestAuthService:
             settings.oidc_issuer_url = original_issuer
             settings.oidc_client_id = original_client
 
+    @pytest.mark.asyncio
+    async def test_initiate_login_with_mocked_config(self, db_session):
+        """Test initiate login with OIDC configured and mocked discovery config."""
+        from app.core.config import settings
+        from unittest.mock import patch
+        from sqlalchemy import select
+        from app.auth.models import OAuthState
+        from datetime import datetime
+
+        # Save original config
+        original_issuer = settings.oidc_issuer_url
+        original_client = settings.oidc_client_id
+        settings.oidc_issuer_url = "https://keycloak.example.com/realms/test"
+        settings.oidc_client_id = "test-client"
+
+        try:
+            auth_service = AuthService(db_session)
+
+            # Set discovery config directly to avoid needing real HTTP requests
+            auth_service.oidc_client._discovery_config = {
+                "authorization_endpoint": "https://keycloak.example.com/realms/test/protocol/openid/auth",
+                "token_endpoint": "https://keycloak.example.com/realms/test/protocol/openid/token",
+                "userinfo_endpoint": "https://keycloak.example.com/realms/test/protocol/openid/userinfo",
+                "end_session_endpoint": "https://keycloak.example.com/realms/test/protocol/openid/logout",
+            }
+
+            result = await auth_service.initiate_login("http://localhost:5173/callback")
+
+            assert result.auth_url is not None
+            assert result.state is not None
+            assert len(result.auth_url) > 0
+            assert len(result.state) > 0
+
+            # Verify auth URL contains expected PKCE parameters
+            assert "client_id=test-client" in result.auth_url
+            assert "response_type=code" in result.auth_url
+            assert "scope=openid+profile+email" in result.auth_url or "scope=openid%20profile%20email" in result.auth_url
+            assert f"state={result.state}" in result.auth_url
+            assert "code_challenge=" in result.auth_url
+            assert "code_challenge_method=S256" in result.auth_url
+
+            # Verify OAuthState stored in DB
+            state_record = await db_session.execute(
+                select(OAuthState).where(OAuthState.state == result.state)
+            )
+            stored_state = state_record.scalar_one_or_none()
+            assert stored_state is not None
+            assert stored_state.used is False
+            assert stored_state.expires_at > datetime.utcnow()
+        finally:
+            settings.oidc_issuer_url = original_issuer
+            settings.oidc_client_id = original_client
+
 
 @pytest.mark.asyncio
 async def test_user_model(db_session):
