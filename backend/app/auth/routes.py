@@ -3,6 +3,7 @@ Authentication API routes for OIDC/PKCE flow.
 """
 from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from fastapi.security import OAuth2PasswordBearer
 from fastapi.responses import RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -26,6 +27,8 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 def get_auth_service(session: AsyncSession = Depends(get_session)) -> AuthService:
     """Get auth service instance."""
     return AuthService(session)
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 
 @router.get("/login", response_model=LoginResponse)
@@ -103,11 +106,26 @@ async def refresh_token(
 
 @router.get("/me", response_model=UserRead)
 async def get_current_user(
-    user_id: str = Query(...),
+    token: str = Depends(oauth2_scheme),
     session: AsyncSession = Depends(get_session),
+    auth_service: AuthService = Depends(get_auth_service),
 ) -> UserRead:
-    """Get current user by ID (for frontend to validate session)."""
+    """Get current user by ID (for frontend to validate session).
+    
+    Requires valid Bearer token from Keycloak OIDC flow.
+    """
     from sqlalchemy import select
+
+    # Verify the token
+    try:
+        payload = await auth_service.oidc_client.validate_id_token(token)
+        user_id = payload.get("sub")
+        if not user_id:
+            raise HTTPException(status_code=401, detail="Invalid token: no subject claim")
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=f"Token verification failed: {e}")
 
     result = await session.execute(select(User).where(User.id == user_id))
     user = result.scalar_one_or_none()
